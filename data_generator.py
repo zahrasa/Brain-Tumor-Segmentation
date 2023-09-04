@@ -11,7 +11,7 @@ from tensorflow.keras.utils import Sequence, to_categorical
 class CustomDataGenerator(Sequence):
     
     def __init__(self, hdf5_file, brain_idx, batch_size=16, view="axial", mode='train', horizontal_flip=False,
-                 vertical_flip=False, rotation_range=0, zoom_range=0., shuffle=True):
+                 vertical_flip=False, rotation_range=0, zoom_range=0., shear_range=0, shuffle=True):
         """
         Custom data generator based on Keras Sequance class.
         This implementation enables multiprocessing and on-the-fly data augmentation 
@@ -69,7 +69,8 @@ class CustomDataGenerator(Sequence):
         self.mode            = mode
         self.horizontal_flip = horizontal_flip
         self.vertical_flip   = vertical_flip
-        self.rotation_range  = rotation_range       
+        self.rotation_range  = rotation_range  
+        self.shear_range     = shear_range       
         self.zoom_range      = [1 - zoom_range, 1 + zoom_range]
         self.shuffle         = shuffle
         self.data_shape      = tuple(np.array(self.data_storage.shape[1:])[np.array(self.view_axes)])
@@ -234,7 +235,12 @@ class CustomDataGenerator(Sequence):
         if self.rotation_range:
             theta = np.random.uniform(-self.rotation_range,self.rotation_range)    
         else:
-            theta = 0            
+            theta = 0    
+
+        if self.shear_range:
+            shear = np.random.uniform(-self.shear_range,self.shear_range)    
+        else:
+            shear = 0            
  
         if self.zoom_range[0] == 1 and self.zoom_range[1] == 1:
             zx, zy = 1, 1
@@ -247,6 +253,7 @@ class CustomDataGenerator(Sequence):
         transform_parameters = {'flip_horizontal': flip_horizontal,
                                 'flip_vertical':flip_vertical,
                                 'theta': theta, 
+                                'shear': shear,
                                 'zx': zx, 
                                 'zy': zy}
     
