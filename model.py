@@ -66,8 +66,9 @@ def unet_model(input_shape, modified_unet=True, learning_rate=0.01, start_channe
         model.load_weights(saved_model_dir)
         print("the model weights were successfully loaded!")
             
-    sgd = SGD(lr=learning_rate, momentum=0.9, decay=0)
+    sgd = SGD(learning_rate=learning_rate, momentum=0.9, weight_decay=0)
     model.compile(optimizer=sgd, loss=custom_loss)
+    model.summary()
     
     return model
 
