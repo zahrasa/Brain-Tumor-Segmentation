@@ -4,7 +4,7 @@ from tensorflow.keras import Input
 from tensorflow.keras.layers import Conv2D, PReLU, UpSampling2D, concatenate , Reshape, Dense, Permute, MaxPool2D
 from tensorflow.keras.layers import GlobalAveragePooling2D, Activation, add, GaussianNoise, BatchNormalization, multiply
 from tensorflow.keras.optimizers import SGD
-from loss import custom_loss
+from loss import custom_loss, dice_coef
 K.set_image_data_format("channels_last")
 
 
@@ -67,7 +67,7 @@ def unet_model(input_shape, modified_unet=True, learning_rate=0.01, start_channe
         print("the model weights were successfully loaded!")
             
     sgd = SGD(learning_rate=learning_rate, momentum=0.9, weight_decay=0)
-    model.compile(optimizer=sgd, loss=custom_loss)
+    model.compile(optimizer=sgd, loss=custom_loss, metrics = [dice_coef])
     model.summary()
     
     return model
@@ -168,4 +168,3 @@ def res_block(x, dim, encoder_path=True):
         x = Conv2D(dim, 1, padding='same', use_bias=False)(x)
         x = add([x,m])
     return  x
-
