@@ -33,10 +33,10 @@ def custom_loss(y_true, y_pred):
     """
     
     return generalized_dice_loss(y_true, y_pred) + 1.25 * categorical_crossentropy(y_true, y_pred)
-    
-# add to loss.py
-  # dice loss as defined above for 4 classes
+
+
 def dice_coef(y_true, y_pred, smooth=1.0):
+    # dice loss as defined above for 4 classes
     class_num = 4
     for i in range(class_num):
         y_true_f = K.flatten(y_true[:,:,:,i])
