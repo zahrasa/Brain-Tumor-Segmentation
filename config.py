@@ -103,6 +103,7 @@ cfg['hor_flip']              = True
 cfg['ver_flip']              = True
 cfg['rotation_range']        = 0
 cfg['zoom_range']            = 0.
+cfg['shear_range']           = 0
 
 
 
