@@ -29,8 +29,8 @@ def train_model(hdf5_dir, brains_idx_dir, view, modified_unet=True, batch_size=1
     if not os.path.isdir(save_dir):
         os.mkdir(save_dir)
     logger       = CSVLogger(os.path.join(save_dir, 'log.txt'))
-    checkpointer = ModelCheckpoint(filepath = os.path.join(save_dir, 'model-{epoch:03d}.h5'), monitor='val_loss', 
-                                   verbose=1, save_best_only=True, mode='auto')
+    checkpointer = ModelCheckpoint(filepath = os.path.join(save_dir, 'model-{epoch:03d}.hdf5'), verbose=1, 
+                                   save_best_only=True, monitor='val_loss', mode='auto')
     early_stop = EarlyStopping(monitor='val_loss', patience=3, verbose=1, restore_best_weights=True)
     tensorboard  = TensorBoard(os.path.join(save_dir, 'tensorboard'))
     callbacks    = [logger, checkpointer, tensorboard, early_stop]        
